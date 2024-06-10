@@ -1,4 +1,4 @@
-# Observatorio IFTM 
+# Observatório IFTM 
 Aplicativo criado para a entrega da matéria: Tecnologias Para Interfaces De Aplicações Web
 
 ## Pré-requisitos
