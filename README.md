@@ -12,11 +12,6 @@ Para executar este aplicativo, é necessário ter o Node.js instalado na máquin
 1. **Baixar os arquivos/itens necessários**
 
 Baixe todos os arquivos do projeto e coloque-os em uma plataforma de desenvolvimento.
-Depois, acesse a pasta do aplicativo:
-
-```bash
-   cd observatorioIFTM
-```
 
 Depois, é necessário instalar a biblioteca React Native Paper e suas dependências no terminal:
 
