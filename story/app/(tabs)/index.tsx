@@ -8,9 +8,24 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
+//Imports para utilizar o componente Avatar.Image da biblioteca React Native Paper......................
+import * as react from 'react';
+import { Avatar } from 'react-native-paper';
+
+import { TouchableOpacity } from 'react-native';
+
+//......................................................................................................
+
 export default function HomeScreen() {
   const [image, setImage] = useState<string | null>(null);
 
+  //Função para inserir a imagem desejada como avatar na aplicação......................................
+  const avatarImage = () => (
+   <Avatar.Image size={24} source={require('../../assets/images/avatar.jpg')} />
+  );
+  const imageUrl = require("../../assets/images/obs.png");
+  const menuImage = require("../../assets/images/menu.png");
+  //....................................................................................................
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -35,23 +50,37 @@ export default function HomeScreen() {
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
+
+  /*const AvatarImageWithOnPress = ({ takeImage }) => (
+      <TouchableOpacity onPress={takeImage}>
+        <Avatar.Image size={24} source={require('')} />
+      </TouchableOpacity>
+  );*/
   };
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={  <Image/> }>
+      headerBackgroundColor={{ light: '##fafafa', dark: '#111212' }}
+      headerImage={  <Image/>} >
+
+        <ThemedView style={styles.navbarContainer}>
+          <Image source={menuImage} style={styles.image} />
+          <ThemedText style={styles.navbar}>Observatório IFTM</ThemedText>
+          <Image source={imageUrl} style={styles.image} />
+        </ThemedView>
+
       <ThemedView style={styles.buttonContainer}>
         <Button icon="camera" mode="contained" onPress={takeImage}>
-          Tirar Foto
+          Câmera
         </Button>
         <Button icon="image" mode="contained" onPress={pickImage}>
-          Selecionar da Galeria
+          Galeria
         </Button>
       </ThemedView>
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </ParallaxScrollView>
   );
+  
 }
 
 const styles = StyleSheet.create({
@@ -73,12 +102,45 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginTop: 16,
+    display:'flex',
   },
   selectedImage: {
     width: 200,
     height: 200,
     marginTop: 16,
   },
+
+//......................
+image: {
+  marginHorizontal: 20,
+  width: 30,
+  height: 30,
+  resizeMode: "contain",
+},
+
+navbarContainer: {
+  flexDirection: "row",
+  justifyContent: "space-between",
+  alignItems: "center",
+  height: 100,
+  paddingTop: 50,
+  shadowColor: "gray",
+  shadowOffset: {
+    width: 0,
+    height: 1,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 4.84,
+  elevation: 20,
+  paddingVertical: 10,
+},
+
+navbar: {
+  fontSize: 20,
+  fontWeight: "bold",
+  textAlign: "center",
+  alignSelf: "center",
+},
 });
