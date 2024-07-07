@@ -13,6 +13,7 @@ import * as react from 'react';
 import { Avatar } from 'react-native-paper';
 
 import { TouchableOpacity } from 'react-native';
+import AvatarImage from 'react-native-paper/lib/typescript/components/Avatar/AvatarImage';
 
 //......................................................................................................
 
@@ -23,8 +24,7 @@ export default function HomeScreen() {
   const avatarImage = () => (
    <Avatar.Image size={24} source={require('../../assets/images/avatar.jpg')} />
   );
-  const imageUrl = require("../../assets/images/obs.png");
-  const menuImage = require("../../assets/images/menu.png");
+  const logoIFTM = require("../../assets/images/OBSIFTM.png");
   //....................................................................................................
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -61,14 +61,8 @@ export default function HomeScreen() {
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '##fafafa', dark: '#111212' }}
-      headerImage={  <Image/>} >
-
-        <ThemedView style={styles.navbarContainer}>
-          <Image source={menuImage} style={styles.image} />
-          <ThemedText style={styles.navbar}>Observatório IFTM</ThemedText>
-          <Image source={imageUrl} style={styles.image} />
-        </ThemedView>
-
+      headerImage={<Image source={logoIFTM} style={styles.reactLogo}/>} >
+    
       <ThemedView style={styles.buttonContainer}>
         <Button icon="camera" mode="contained" onPress={takeImage}>
           Câmera
@@ -79,6 +73,7 @@ export default function HomeScreen() {
       </ThemedView>
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </ParallaxScrollView>
+  
   );
   
 }
@@ -93,13 +88,6 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -107,40 +95,18 @@ const styles = StyleSheet.create({
     display:'flex',
   },
   selectedImage: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
     marginTop: 16,
+  },
+  reactLogo: {
+    height: 1000,
+    width: 1000,
+    bottom: 60,
+    left: 100,
+    position: 'absolute',
   },
 
 //......................
-image: {
-  marginHorizontal: 20,
-  width: 30,
-  height: 30,
-  resizeMode: "contain",
-},
 
-navbarContainer: {
-  flexDirection: "row",
-  justifyContent: "space-between",
-  alignItems: "center",
-  height: 100,
-  paddingTop: 50,
-  shadowColor: "gray",
-  shadowOffset: {
-    width: 0,
-    height: 1,
-  },
-  shadowOpacity: 0.25,
-  shadowRadius: 4.84,
-  elevation: 20,
-  paddingVertical: 10,
-},
-
-navbar: {
-  fontSize: 20,
-  fontWeight: "bold",
-  textAlign: "center",
-  alignSelf: "center",
-},
 });
