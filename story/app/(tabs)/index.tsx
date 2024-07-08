@@ -8,7 +8,7 @@ import { ThemedText } from '@/components/ThemedText';
 
 const mockData = [
   { id: '1', uri: 'https://ernanimelo.pro.br/images/ernani/ernani_1_e.png' },
-  { id: '2', uri: 'https://images.pexels.com/photos/160846/french-bulldog-summer-smile-joy-160846.jpeg' },
+  { id: '2', uri: 'https://images.pexels.com/photos/6142753/pexels-photo-6142753.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
   { id: '3', uri: 'https://images.pexels.com/photos/2080383/pexels-photo-2080383.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1' },
   { id: '4', uri: 'https://images.pexels.com/photos/2870510/pexels-photo-2870510.jpeg' },
   { id: '5', uri: 'https://images.pexels.com/photos/445109/pexels-photo-445109.jpeg' },
@@ -49,8 +49,30 @@ export default function HomeScreen() {
     }
   };
 
-  const openImage = (uri: string) => {
-    setSelectedImage(uri);
+  const openImage = (uri: string, id: string) => {
+    switch (id) {
+      case '1':
+        setSelectedImage('https://scontent.fudi1-2.fna.fbcdn.net/v/t31.18172-8/16113476_1048373305267286_1048077865783499369_o.jpg?_nc_cat=111&ccb=1-7&_nc_sid=2a1932&_nc_eui2=AeErXjZtRu-W2ypmG5rjjm2KAZGEMOx4UNkBkYQw7HhQ2UaMIbHVhal_D0uvSWwHyCcodKWB6oB54nqOYmMRNuFG&_nc_ohc=PRX9dtJ67mwQ7kNvgFEgzUz&_nc_ht=scontent.fudi1-2.fna&oh=00_AYAN6tt0gqgYxZtcxXAahKx8WlEszk9ej4UF3aXaxBD1Vw&oe=66B2DC73');
+        break;
+      case '2':
+        setSelectedImage('https://images.pexels.com/photos/373467/pexels-photo-373467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        break;
+      case '3':
+      setSelectedImage('https://images.pexels.com/photos/598917/pexels-photo-598917.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      break;
+      case '4':
+      setSelectedImage('https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      break;
+      case '5':
+      setSelectedImage('https://images.pexels.com/photos/2728252/pexels-photo-2728252.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      break;
+      case '6':
+      setSelectedImage('https://images.pexels.com/photos/269809/pexels-photo-269809.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+      break;
+      // Adicione casos adicionais aqui para outros IDs
+      default:
+        setSelectedImage(uri); // Usa a URI original se nenhum ID correspondente for encontrado
+    }
   };
 
   const closeImage = () => {
@@ -69,7 +91,7 @@ export default function HomeScreen() {
         horizontal
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => openImage(item.uri)}>
+          <TouchableOpacity onPress={() => openImage(item.uri, item.id)}>
             <View style={styles.imageCircle}>
               <Image source={{ uri: item.uri }} style={styles.circleImage} />
             </View>
@@ -78,16 +100,6 @@ export default function HomeScreen() {
         style={styles.flatList}
       />
       <View style={styles.separator} />
-
-      <View style={styles.iconContainer}>
-        <TouchableOpacity onPress={pickImage}>
-          <Avatar.Icon size={50} icon="image" style={styles.icon} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={takeImage}>
-          <Avatar.Icon size={50} icon="camera" style={styles.icon} />
-        </TouchableOpacity>
-      </View>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
 
       <Modal visible={selectedImage !== null} transparent={true}>
         <View style={styles.modalContainer}>
@@ -100,7 +112,6 @@ export default function HomeScreen() {
         </View>
       </Modal>
     </ScrollView>
-
   );
 }
 
@@ -155,8 +166,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   fullImage: {
-    width: '90%',
-    height: '70%',
+    width: '100%',
+    height: '65%',
+    resizeMode: 'cover',
   },
   closeButton: {
     marginTop: 20,
