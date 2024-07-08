@@ -1,36 +1,29 @@
 import React, { useState } from 'react';
-import { View, Alert, Image, StyleSheet, Platform } from 'react-native';
-import { Button } from 'react-native-paper';
+import { View, Image, StyleSheet, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { Avatar, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
-
-import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 
-//Imports para utilizar o componente Avatar.Image da biblioteca React Native Paper......................
-import * as react from 'react';
-import { Avatar } from 'react-native-paper';
-
-import { TouchableOpacity } from 'react-native';
-import AvatarImage from 'react-native-paper/lib/typescript/components/Avatar/AvatarImage';
-
-//......................................................................................................
+const mockData = [
+  { id: '1', uri: 'https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png' },
+  { id: '2', uri: 'https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png' },
+  { id: '3', uri: 'https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png' },
+  { id: '4', uri: 'https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png' },
+  { id: '5', uri: 'https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png' },
+  // Adicione mais dados conforme necessário
+];
 
 export default function HomeScreen() {
   const [image, setImage] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  //Função para inserir a imagem desejada como avatar na aplicação......................................
-  const avatarImage = () => (
-   <Avatar.Image size={24} source={require('../../assets/images/avatar.jpg')} />
-  );
   const logoIFTM = require("../../assets/images/OBSIFTM.png");
-  //....................................................................................................
+
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [9, 16],
       quality: 1,
     });
 
@@ -43,60 +36,101 @@ export default function HomeScreen() {
     let result = await ImagePicker.launchCameraAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [9, 16],
       quality: 1,
     });
 
     if (!result.canceled) {
       setImage(result.assets[0].uri);
     }
+  };
 
-  /*const AvatarImageWithOnPress = ({ takeImage }) => (
-      <TouchableOpacity onPress={takeImage}>
-        <Avatar.Image size={24} source={require('')} />
-      </TouchableOpacity>
-  );*/
+  const openImage = (uri: string) => {
+    setSelectedImage(uri);
+  };
+
+  const closeImage = () => {
+    setSelectedImage(null);
   };
 
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '##fafafa', dark: '#111212' }}
-      headerImage={<Image source={logoIFTM} style={styles.reactLogo}/>} >
-    
-      <ThemedView style={styles.buttonContainer}>
-        <Button icon="camera" mode="contained" onPress={takeImage}>
-          Câmera
-        </Button>
-        <Button icon="image" mode="contained" onPress={pickImage}>
-          Galeria
-        </Button>
-      </ThemedView>
+      headerBackgroundColor={{ light: '#fafafa', dark: '#111212' }}
+      headerImage={<Image source={logoIFTM} style={styles.reactLogo} />}
+    >
+      <FlatList
+        data={mockData}
+        horizontal
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity onPress={() => openImage(item.uri)}>
+            <View style={styles.imageCircle}>
+              <Image source={{ uri: item.uri }} style={styles.circleImage} />
+            </View>
+          </TouchableOpacity>
+        )}
+        style={styles.flatList}
+      />
+
+      <View style={styles.separator} />
+
+      <View style={styles.iconContainer}>
+        <TouchableOpacity onPress={pickImage}>
+          <Avatar.Icon size={50} icon="image" style={styles.icon} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={takeImage}>
+          <Avatar.Icon size={50} icon="camera" style={styles.icon} />
+        </TouchableOpacity>
+      </View>
+
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+
+      <Modal visible={selectedImage !== null} transparent={true}>
+        <View style={styles.modalContainer}>
+          {selectedImage && (
+            <Image source={{ uri: selectedImage }} style={styles.fullImage} />
+          )}
+          <Button mode="contained" onPress={closeImage} style={styles.closeButton}>
+            Fechar
+          </Button>
+        </View>
+      </Modal>
     </ParallaxScrollView>
-  
   );
-  
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  flatList: {
+    marginTop: 20,
+    paddingHorizontal: 10,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  imageCircle: {
+    borderRadius: 50,
+    overflow: 'hidden',
+    marginHorizontal: 5,
+    borderWidth: 2,
+    borderColor: 'white',
   },
-  buttonContainer: {
+  circleImage: {
+    width: 70,
+    height: 70,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: 'gray',
+    marginVertical: 10,
+  },
+  iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: 16,
-    display:'flex',
+    marginVertical: 10,
+  },
+  icon: {
+    backgroundColor: '#333', // Fundo mais escuro para os ícones
   },
   selectedImage: {
-    width: 100,
-    height: 100,
+    width: '100%',
+    height: 400,
     marginTop: 16,
   },
   reactLogo: {
@@ -106,7 +140,17 @@ const styles = StyleSheet.create({
     left: 100,
     position: 'absolute',
   },
-
-//......................
-
+  modalContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fullImage: {
+    width: '90%',
+    height: '70%',
+  },
+  closeButton: {
+    marginTop: 20,
+  },
 });
