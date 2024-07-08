@@ -60,24 +60,9 @@ export default function HomeScreen() {
   return (
     <ScrollView>
       <ThemedView style={styles.logoIFTM}>
-        <Image source={logoMENU} style={styles.image1} />
-        <ThemedText style={styles.text}>Observatório</ThemedText>
         <Image source={logoOBS} style={styles.image2} />
+        <ThemedText style={styles.text}>Adicionar ao story</ThemedText>
       </ThemedView>
-      <FlatList
-        data={mockData}
-        horizontal
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => openImage(item.uri)}>
-            <View style={styles.imageCircle}>
-              <Image source={{ uri: item.uri }} style={styles.circleImage} />
-            </View>
-          </TouchableOpacity>
-        )}
-        style={styles.flatList}
-      />
-      <View style={styles.separator} />
 
       <View style={styles.iconContainer}>
         <TouchableOpacity onPress={pickImage}>
@@ -87,60 +72,20 @@ export default function HomeScreen() {
           <Avatar.Icon size={50} icon="camera" style={styles.icon} />
         </TouchableOpacity>
       </View>
-      {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
 
-      <Modal visible={selectedImage !== null} transparent={true}>
-        <View style={styles.modalContainer}>
-          {selectedImage && (
-            <Image source={{ uri: selectedImage }} style={styles.fullImage} />
-          )}
-          <Button mode="contained" onPress={closeImage} style={styles.closeButton}>
-            Fechar
-          </Button>
-        </View>
-      </Modal>
+    {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
     </ScrollView>
-
   );
 }
 
 const styles = StyleSheet.create({
-   plusSignContainer: {
-    position: 'absolute',
-    top: -15, // Posição o sinal "+" acima do ícone
-    left: 10, // Posição o sinal "+" à esquerda do ícone
-    backgroundColor: 'transparent',
-  },
-  plusSign: {
-    fontSize: 24, // Tamanho do sinal "+"
-    color: '#fff', // Cor do sinal "+"
-  },
-  flatList: {
-    marginTop: 25,
-    paddingHorizontal: 10,
-  },
-  imageCircle: {
-    borderRadius: 50,
-    overflow: 'hidden',
-    marginHorizontal: 5,
-    borderWidth: 2,
-    borderColor: '#FE3D8A',
-  },
-  circleImage: {
-    width: 70,
-    height: 70,
-  },
-  separator: {
-    height: 1,
-    backgroundColor: '#f2f0f0',
-    marginVertical: 10,
-  },
   iconContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginVertical: 10,
   },
   icon: {
+    marginTop: 20,
     backgroundColor: '#071D41', // Fundo mais escuro para os ícones
   },
   selectedImage: {
@@ -162,18 +107,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   logoIFTM: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     justifyContent: 'space-around',
     marginTop: 30,
-    height: 80,
+    height: 100,
     resizeMode: 'contain',
     fontSize: 20,
     fontWeight: 'bold',
     alignItems: 'center',
     backgroundColor: '#ebebeb',
+    paddingBottom: 10,
   },
   text:{
-    fontSize: 23,
+    fontSize: 20,
     fontWeight: "bold",
     textAlign: "center",
     color: '#6990CF',
@@ -186,7 +132,7 @@ const styles = StyleSheet.create({
   image2: {
     marginTop: 5,
     marginHorizontal: 20,
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
   },
 });
