@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView } from 'react-native';
+import { useDispatch } from 'react-redux';
 import { Avatar, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -17,6 +18,8 @@ const mockData = [
 ];
 
 export default function HomeScreen() {
+  const dispatch = useDispatch();
+
   const [image, setImage] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
@@ -49,6 +52,16 @@ export default function HomeScreen() {
     }
   };
 
+  const generateRandomId = () => {
+    return 'id_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+  };
+
+  const saveImage = () => {
+    const id = generateRandomId();
+    dispatch({ type: 'ADD_IMAGE', payload: {uri: image, id} });
+    setImage(null);
+  }
+
   const openImage = (uri: string) => {
     setSelectedImage(uri);
   };
@@ -74,6 +87,13 @@ export default function HomeScreen() {
       </View>
 
     {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
+    {image &&
+      (
+        <TouchableOpacity onPress={saveImage} style={styles.iconContainer}>
+          <Avatar.Icon size={50} icon="send" style={styles.icon} />
+        </TouchableOpacity>
+      )
+    }
     </ScrollView>
   );
 }

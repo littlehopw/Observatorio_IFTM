@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView, Dimensions } from 'react-native';
 import { Avatar, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
+import { useSelector } from 'react-redux';
+
+const { height, width } = Dimensions.get('window');
 
 const mockData = [
   { id: '1', uri: 'https://ernanimelo.pro.br/images/ernani/ernani_1_e.png' },
@@ -52,7 +55,7 @@ export default function HomeScreen() {
   const openImage = (uri: string, id: string) => {
     switch (id) {
       case '1':
-        setSelectedImage('https://scontent.fudi1-2.fna.fbcdn.net/v/t31.18172-8/16113476_1048373305267286_1048077865783499369_o.jpg?_nc_cat=111&ccb=1-7&_nc_sid=2a1932&_nc_eui2=AeErXjZtRu-W2ypmG5rjjm2KAZGEMOx4UNkBkYQw7HhQ2UaMIbHVhal_D0uvSWwHyCcodKWB6oB54nqOYmMRNuFG&_nc_ohc=PRX9dtJ67mwQ7kNvgFEgzUz&_nc_ht=scontent.fudi1-2.fna&oh=00_AYAN6tt0gqgYxZtcxXAahKx8WlEszk9ej4UF3aXaxBD1Vw&oe=66B2DC73');
+        setSelectedImage('myStories');
         break;
       case '2':
         setSelectedImage('https://images.pexels.com/photos/373467/pexels-photo-373467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
@@ -79,6 +82,28 @@ export default function HomeScreen() {
     setSelectedImage(null);
   };
 
+  const images = useSelector(state => state.images);
+  const myStories = () => {
+    return (
+      <>
+        <View style={styles.modalContainer}>
+          <FlatList
+            data={images}
+            pagingEnabled
+            horizontal
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => (
+                <Image source={{uri: item.uri}} style={styles.fullImage} />
+              )}
+            />
+        </View>
+        <Button mode="contained" onPress={closeImage} style={styles.closeButton}>
+          Fechar
+        </Button>
+      </>
+    );
+  }
+
   return (
     <ScrollView>
       <ThemedView style={styles.logoIFTM}>
@@ -92,7 +117,10 @@ export default function HomeScreen() {
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => openImage(item.uri, item.id)}>
-            <View style={styles.imageCircle}>
+            <View style={[
+                styles.imageCircle,
+                { borderColor: item.id == '1' && images.length > 1 ? "#00ff22" : '#FE3D8A' }
+            ]}>
               <Image source={{ uri: item.uri }} style={styles.circleImage} />
             </View>
           </TouchableOpacity>
@@ -102,14 +130,20 @@ export default function HomeScreen() {
       <View style={styles.separator} />
 
       <Modal visible={selectedImage !== null} transparent={true}>
-        <View style={styles.modalContainer}>
-          {selectedImage && (
-            <Image source={{ uri: selectedImage }} style={styles.fullImage} />
-          )}
-          <Button mode="contained" onPress={closeImage} style={styles.closeButton}>
-            Fechar
-          </Button>
-        </View>
+        {
+          selectedImage === 'myStories'
+            ? myStories()
+            : (
+              <View style={styles.modalContainer}>
+                {selectedImage && (
+                  <Image source={{ uri: selectedImage }} style={styles.fullImage} />
+                )}
+                <Button mode="contained" onPress={closeImage} style={styles.closeButton}>
+                  Fechar
+                </Button>
+              </View>
+            )
+        }
       </Modal>
     </ScrollView>
   );
@@ -135,7 +169,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginHorizontal: 5,
     borderWidth: 2,
-    borderColor: '#FE3D8A',
   },
   circleImage: {
     width: 70,
@@ -160,18 +193,22 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   modalContainer: {
-    flex: 1,
+    height: height,
+    width: width,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   fullImage: {
-    width: '100%',
-    height: '65%',
+    aspectRatio: 9 / 16,
+    width: width,
+    height: 'auto',
     resizeMode: 'cover',
   },
   closeButton: {
-    marginTop: 20,
+    position: 'absolute',
+    bottom: 20,
+    alignSelf: 'center',
   },
   logoIFTM: {
     flexDirection: 'row',
