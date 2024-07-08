@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, FlatList, Modal } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, FlatList, Modal, ScrollView } from 'react-native';
 import { Avatar, Button } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
 
 const mockData = [
   { id: '1', uri: 'https://static-00.iconduck.com/assets.00/person-circle-icon-512x512-zwz8ctki.png' },
@@ -17,7 +19,8 @@ export default function HomeScreen() {
   const [image, setImage] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  const logoIFTM = require("../../assets/images/OBSIFTM.png");
+  const logoOBS = require("../../assets/images/obs.png");
+  const logoMENU = require("../../assets/images/menu.png");
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -54,10 +57,12 @@ export default function HomeScreen() {
   };
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#fafafa', dark: '#111212' }}
-      headerImage={<Image source={logoIFTM} style={styles.reactLogo} />}
-    >
+    <ScrollView>
+      <ThemedView style={styles.logoIFTM}>
+        <Image source={logoMENU} style={styles.image1} />
+        <ThemedText style={styles.text}>Observatório</ThemedText>
+        <Image source={logoOBS} style={styles.image2} />
+      </ThemedView>
       <FlatList
         data={mockData}
         horizontal
@@ -71,7 +76,6 @@ export default function HomeScreen() {
         )}
         style={styles.flatList}
       />
-
       <View style={styles.separator} />
 
       <View style={styles.iconContainer}>
@@ -82,7 +86,6 @@ export default function HomeScreen() {
           <Avatar.Icon size={50} icon="camera" style={styles.icon} />
         </TouchableOpacity>
       </View>
-
       {image && <Image source={{ uri: image }} style={styles.selectedImage} />}
 
       <Modal visible={selectedImage !== null} transparent={true}>
@@ -95,7 +98,8 @@ export default function HomeScreen() {
           </Button>
         </View>
       </Modal>
-    </ParallaxScrollView>
+    </ScrollView>
+
   );
 }
 
@@ -117,7 +121,7 @@ const styles = StyleSheet.create({
   },
   separator: {
     height: 1,
-    backgroundColor: 'gray',
+    backgroundColor: '#f2f0f0',
     marginVertical: 10,
   },
   iconContainer: {
@@ -133,13 +137,6 @@ const styles = StyleSheet.create({
     height: 400,
     marginTop: 16,
   },
-  reactLogo: {
-    height: 1000,
-    width: 1000,
-    bottom: 60,
-    left: 100,
-    position: 'absolute',
-  },
   modalContainer: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.8)',
@@ -152,5 +149,33 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 20,
+  },
+  logoIFTM: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 30,
+    height: 80,
+    resizeMode: 'contain',
+    fontSize: 20,
+    fontWeight: 'bold',
+    alignItems: 'center',
+    backgroundColor: '#ebebeb',
+  },
+  text:{
+    fontSize: 25,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: '#6990CF',
+  },
+  image1: {
+    marginHorizontal: 20,
+    width: 45,
+    height: 45,
+  },
+  image2: {
+    marginTop: 5,
+    marginHorizontal: 20,
+    width: 40,
+    height: 40,
   },
 });
