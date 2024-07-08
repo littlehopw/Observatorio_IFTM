@@ -58,17 +58,17 @@ export default function HomeScreen() {
         setSelectedImage('https://images.pexels.com/photos/373467/pexels-photo-373467.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
         break;
       case '3':
-      setSelectedImage('https://images.pexels.com/photos/598917/pexels-photo-598917.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-      break;
+        setSelectedImage('https://images.pexels.com/photos/598917/pexels-photo-598917.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        break;
       case '4':
-      setSelectedImage('https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-      break;
+        setSelectedImage('https://images.pexels.com/photos/208984/pexels-photo-208984.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        break;
       case '5':
-      setSelectedImage('https://images.pexels.com/photos/2728252/pexels-photo-2728252.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-      break;
+        setSelectedImage('https://images.pexels.com/photos/2728252/pexels-photo-2728252.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        break;
       case '6':
-      setSelectedImage('https://images.pexels.com/photos/269809/pexels-photo-269809.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
-      break;
+        setSelectedImage('https://images.pexels.com/photos/269809/pexels-photo-269809.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+        break;
       // Adicione casos adicionais aqui para outros IDs
       default:
         setSelectedImage(uri); // Usa a URI original se nenhum ID correspondente for encontrado
@@ -116,7 +116,7 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-   plusSignContainer: {
+  plusSignContainer: {
     position: 'absolute',
     top: -15, // Posição o sinal "+" acima do ícone
     left: 10, // Posição o sinal "+" à esquerda do ícone
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#ebebeb',
   },
-  text:{
+  text: {
     fontSize: 23,
     fontWeight: "bold",
     textAlign: "center",
